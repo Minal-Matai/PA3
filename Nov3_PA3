@@ -1,0 +1,308 @@
+
+import time
+'''
+#Calls for the function to play a flashcard quiz and uses the file name from the user as a parameter
+def play_quiz(filename):
+
+    print(f"Your file is named '{filename}'")
+    score = 0
+    
+    user_experience("\nloading...", 2)
+    
+    #Instructions for quiz
+    print("\nYou are now starting the quiz! Here are a few notes:\n-Plus 3 point for each correct answer\n-Minus 1 point for each incorrect\n-Enter 'stop' if you would like to end the game\n-Enter 'skip' to skip over this term\n")
+    
+    print("Starting in...")
+    for i in range(5,0,-1):
+        print(i)
+        time.sleep(0.5)
+        
+    with open(filename, "r") as f: #opens the file in read mode as a variable
+        lines = f.read().splitlines()
+    
+    set_size = int(input(f"\nPlease choose the size of your set (the max number is {len(lines)}): "))
+    set_control = True
+    while set_control:
+        #Checks if the user entered an integer for the # of sets
+        try:
+            size = int(set_size)
+            while set_size > int(len(lines)) or set_size <= 0:
+                set_size = int(input("Error! This size exceeds the amount of the set, please choose a lower number: "))
+            print(f"\nThe size of your set is {size} terms. Good luck!")
+            set_control = False
+        except ValueError:
+            print("Error! The value you entered was not an integer (a whole number). \nPlease enter answer as an integer:")
+            set_control = True
+
+    for i in range(set_size):
+        r = random.choice(lines)
+        term, definition = r.strip().split(",") #stores the words before and after the comma in two variables each
+
+        print("*"*20)
+        print(" "*4+f"Card {i+1}: {term.strip()}"+" "*6)
+        print("*"*20)
+        user_answer = input(f"\nWhat is the definition/name of {term.strip()}? ").capitalize().strip()
+
+        stop_game = False
+
+        if user_answer == "Stop":
+            break
+        elif user_answer == "Skip":
+            print(f"You've skipped this term, the correct answer was: {definition}")
+            continue
+        else:
+            #If the user got the ans wrong they have three tries to get the correct answer
+            counter = 0
+            while user_answer != definition and counter<=1:
+                user_answer = input(f"That is incorrect!\nPlease try again or type 'stop' to end game or 'skip' to skip this term.\nScore = -1\nWhat is the definition/name of {term.strip()}? ").capitalize().strip()
+                score-=1
+                if user_answer == "Stop":
+                    stop_game = True
+                    break
+                elif user_answer == "Skip":
+                    print(f"You've skipped this term, the correct answer was: {definition}")
+                    break
+                counter+=1
+            if stop_game == True:
+                break
+            if user_answer == definition:
+                print("Correct!\nScore = +3")    
+                score+=3
+            else:
+                print(f"You are out of tries, the correct definition of {term.strip()} is {definition}")
+
+        print("\n")
+        print("-"*20)
+        print(f"Your current score is:")
+        print(" "*8+score+" "*8)
+        print("-"*20)
+
+    print("\nCongrats! You finished the quiz!!")
+    return score
+    
+#Function that takes the score from the play_quiz function and username from the main function and adds it to a file  
+def add_scores(new_score, username):
+    with open("scores_count.txt", "a") as f:
+        f.write(f"{username}: {new_score}\n")
+
+#Displays the file with scores
+def show_scores():
+    try:
+        with open("scores_count.txt","r") as f:
+            score_list = f.readlines()
+            print(f"\nMost recent score: {score_list[-1].strip()}")
+            print("\nAll previous scores:")
+            for i in score_list:
+                print(i.strip())
+            print("\n")
+    except FileNotFoundError:
+        print("No file found! Play the quiz first to earn points!")
+
+#Checks if the user input is in the list of correct values
+def error_handle(correct_list, user_input):
+    while user_input not in correct_list:
+        print("*"*50)
+        print(" "*22+"error!"+" "*22)
+        print(" "*12+"that is not a valid option"+" "*12)
+        print(" "*17+"please try again"+" "*17)
+        print("*"*50)
+        print("\nAcceptable choices:")
+
+        for i in correct_list:
+            print(f"- {i}")
+        user_input = input("Please re-enter your answer using the acceptable choices above:\n>>").lower().strip()
+    return user_input
+
+#Creates a new file to add the user's choice to terms
+def creat_new_file(file_types, correct_ans):
+    file_name = input("What would you like to name your file?\n>>").lower().strip()
+    quiz_ext = input("Would you like it in a .txt or .csv file format?\n>>").lower().strip()
+    quiz_ext = error_handle(file_types, quiz_ext)
+    if quiz_ext in [".csv","csv"]: #comma separated value
+        new_file = file_name+".csv" #csv
+    else:
+        new_file = file_name+".txt" #txt
+    print(f"Your new file is named {new_file}")
+    with open(new_file, "a") as f:
+        loop_control = True
+        while loop_control:
+            term = input("Please enter your term: ").capitalize().strip()
+            definition = input(f"Please enter the definition for {term}: ").capitalize().strip()
+            f.write(f"{term}, {definition}\n")
+            replay = input(f"Would you like to add anything else to {new_file} (yes/no)? ").lower().strip()
+            error_handle(correct_ans, replay)
+            if replay in ["no", "n"]:
+                loop_control = False
+            else:
+                loop_control = True
+    return new_file
+
+#Uses the time package to enhance user experience
+def user_experience(string, n):
+    for i in range(n):
+        time.sleep(0.3)
+        print(string)
+
+def main(): 
+    #initialize variables
+    initial_choices = ["play","see previous","exit"]
+    file_types = [".txt", ".csv", "txt", "csv"]
+    p_options = ["play","p","play game"]
+    h_options = ["see previous", "previous", "s", "see", "sp", "s"]
+    e_options = ["exit","e","exit game"]
+    correct_ans = ["yes","no", "y", "n"]
+    p1_options = ["example","e","create","c"]
+    #create new list with the file names and append the new file name into that list
+
+    game_on = True
+    while game_on:
+        print("\n!Welcome to your diet and budget tracker!")
+
+        date = input("\nWhat is the date of when you are buying the food items?\n>>")
+            
+
+        #Runs code if the user does not want to exit by asking them for the name and type of file
+        first_choice = ""
+        while first_choice not in e_options: 
+            
+            user_experience("loading homepage...", 3)
+            print("\nHomepage:")
+            print("*"*20)
+            for item in initial_choices:
+                print(f"- {item}")
+            print("*"*20)
+            first_choice = input(f"What would you like to do today?\n>>").lower().strip()
+            user_experience("\nredirecting...", 1)
+            if first_choice in p_options: #playing the game
+                print("You can view an example for reference or create your own file with food items and budgets")
+                simple_ans = ["yes","no","y", "n"]
+                add_terms = input("\nWould you like to create your own folder with your food items and budget (yes/no)?\n>>").lower()
+                add_terms = error_handle(simple_ans, add_terms)
+                if add_terms not in ["no", "n"]:
+                    file_url = creat_new_file(file_types, correct_ans)
+                else:
+                    file_check = True
+                    while file_check:
+                        user_experience("loading...", 2)
+                        quiz_fn = input(f"\nWhat is the name of the existing file you would like to play (the only ones you have right now is periodic_table and any new files you created)?\n>>").lower().strip()
+                        quiz_ext = input("Is it a .txt or .csv file?\n>>").lower().strip()
+                        #Checks if file name is valid, and stores the file name if it exists
+                        quiz_ext = error_handle(file_types, quiz_ext)
+
+                        #Stores correct file name and inputs it into functions
+                        if quiz_ext in [".csv","csv"]: #comma separated value
+                            file_url = quiz_fn+".csv" #csv
+                        else:
+                            file_url = quiz_fn+".txt" #txt
+                        
+                        try:
+                            with open(file_url, "r") as f:
+                                content_check = f.read()
+                                file_check = False
+                        except FileNotFoundError:
+                            print(f"Error! The file '{file_url}' was not found. Please re-enter the name with a file that exists.") 
+                            file_check = True
+
+                    user_score = play_quiz(file_url)
+                    add_scores(user_score, username)
+
+            #Runs the other code if user does not want to exit or play
+            elif first_choice in h_options: #Looks at previous scores
+                show_scores()
+            elif first_choice in e_options: #exiting
+                game_on = False
+            else: # print error
+                first_choice = error_handle(initial_choices, first_choice)
+        
+        #Checks if user wants to play again or exit
+        replay = input("Are you sure you want to leave the game? ").lower().strip()
+        error_handle(correct_ans, replay)
+        if replay in ["no", "n"]:
+            game_on = True
+            continue
+        else:
+            game_on = False
+            print("\nGoodbye!")
+        
+main()
+
+'''
+def star_wars_intro_text(text_lines, initial_indent=20, initial_width=40, indent_decrease=1, width_increase=2):
+    """
+    Prints text in a style inspired by the Star Wars opening crawl.
+
+    Args:
+        text_lines (list): A list of strings, where each string is a paragraph.
+        initial_indent (int): The starting indentation for the first line.
+        initial_width (int): The starting line width for the first line.
+        indent_decrease (int): How much to decrease the indent after each pair of lines.
+        width_increase (int): How much to increase the width after each pair of lines.
+    """
+    current_indent = initial_indent
+    current_width = initial_width
+
+    for paragraph in text_lines:
+        words = paragraph.split()
+        current_line = []
+        line_count = 0
+
+        for word in words:
+            if len(" ".join(current_line + [word])) <= current_width:
+                current_line.append(word)
+            else:
+                # Justify the current line
+                line_str = " ".join(current_line)
+                if len(line_str) < current_width:
+                    num_gaps = len(current_line) - 1
+                    if num_gaps > 0:
+                        extra_spaces = current_width - len(line_str)
+                        spaces_per_gap = extra_spaces // num_gaps
+                        remaining_spaces = extra_spaces % num_gaps
+                        justified_line = ""
+                        for i, w in enumerate(current_line):
+                            justified_line += w
+                            if i < num_gaps:
+                                justified_line += " " * (spaces_per_gap + (1 if i < remaining_spaces else 0))
+                        print(" " * current_indent + justified_line)
+                    else: # Single word line or no gaps
+                        print(" " * current_indent + line_str.center(current_width))
+                else:
+                    print(" " * current_indent + line_str)
+
+                line_count += 1
+                if line_count % 2 == 0:  # Adjust parameters after every two lines
+                    current_indent = max(0, current_indent - indent_decrease)
+                    current_width += width_increase
+
+                current_line = [word]
+
+        # Print the last line of the paragraph (not justified)
+        if current_line:
+            print(" " * current_indent + " ".join(current_line))
+            line_count += 1
+            if line_count % 2 == 0:
+                current_indent = max(0, current_indent - indent_decrease)
+                current_width += width_increase
+
+        # Add an empty line between paragraphs, and adjust parameters
+        print()
+        current_indent = max(0, current_indent - indent_decrease)
+        current_width += width_increase
+
+# Example Usage:
+intro_text = [
+    "A long time ago in a galaxy far, far away...",
+    "It is a period of civil war. Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire.",
+    "During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon, the DEATH STAR, an armored space station with enough power to destroy an entire planet.",
+    "Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy...."
+]
+
+star_wars_intro_text(intro_text)
+'''
+ls
+cd O tab
+ls
+cd Mod tab 2 tab
+ls
+cd PA2
+'''

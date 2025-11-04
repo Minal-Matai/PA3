@@ -1,0 +1,117 @@
+import time
+
+def sample_chart():
+    print("This function allows user to view an example")
+
+def create_new_file(file_name):
+    print("This function allows user to create a new file")
+    diet_info = ""
+    return diet_info
+
+def add_chart(diet_info, date):
+    print("This function adds all previous charts to a file")
+
+def show_chart():
+    print("Displays all previous charts")
+
+def error_handle(correct_list, user_input):
+    while user_input not in correct_list:
+        print("*"*50)
+        print(" "*22+"error!"+" "*22)
+        print(" "*12+"that is not a valid option"+" "*12)
+        print(" "*17+"please try again"+" "*17)
+        print("*"*50)
+        print("\nAcceptable choices:")
+
+        for i in correct_list:
+            print(f"- {i}")
+        user_input = input("Please re-enter your answer using the acceptable choices above:\n>>").lower().strip()
+    return user_input
+
+def user_experience(string, n):
+    for i in range(n):
+        time.sleep(0.3)
+        print(string)
+
+def main(): 
+    #initialize variables
+    initial_choices = ["view sample","see previous","exit"]
+    file_types = [".txt", ".csv", "txt", "csv"]
+    p_options = ["view","vs","view sample","1","1.", "sample"]
+    h_options = ["see previous", "previous", "s", "see", "sp", "s", "2","2."]
+    e_options = ["exit","e","exit game", "3", "3."]
+    correct_ans = ["yes","no", "y", "n"]
+    c_options = ["example","e","create","c", "a.", "b.", "a", "b"]
+    #create new list with the file names and append the new file name into that list
+
+    game_on = True
+    while game_on:
+        print("\n!Welcome to your diet and budget tracker!")
+
+        time.sleep(1)
+
+        date = input("\nWhat is the date of when you are completing this entry?\n>>")
+
+        #Runs code if the user does not want to exit by asking them for the name and type of file
+        first_choice = ""
+        while first_choice not in e_options: 
+            
+            user_experience("loading homepage...", 3)
+            print("\nHomepage:")
+            print("*"*20)
+            for item in initial_choices:
+                print(f"{initial_choices.index(item) + 1}. {item}")
+            print("*"*20)
+            first_choice = input(f"What would you like to do today?\n>>").lower().strip()
+
+            user_experience("redirecting...", 3)
+            print("\n")
+            
+            if first_choice in p_options: #creating the diet chart
+                print("*"*20)
+                print("Get your list of ingredients ready to enter! You can... \n a. View an example for reference \n b. Create your own file with food items and budgets")
+                print("*"*20)
+                add_terms = input("Wht would you like to do?\n>>").lower()
+                add_terms = error_handle(c_options, add_terms)
+
+                if add_terms in ["create", "c", "b.", "b", "create file","create your own file with food items and budgets"]:
+
+                    print("\n")
+                    user_experience("loading...", 2)
+                    quiz_fn = input(f"\nWhat would you like to name your file?\n>>").lower().strip()
+                    quiz_ext = input("Would you like a .txt or .csv file?\n>>").lower().strip()
+                    #Checks if file name is valid, and stores the file name if it exists
+                    quiz_ext = error_handle(file_types, quiz_ext)
+
+                        #Stores correct file name and inputs it into functions
+                    if quiz_ext in [".csv","csv"]: #comma separated value
+                        file_url = quiz_fn+".csv" #csv
+                    else:
+                        file_url = quiz_fn+".txt" #txt
+                        
+                    diet_chart = create_new_file(file_url)
+                    add_chart(diet_chart, date)
+
+                else:
+
+                    sample_chart()
+
+            #Runs the other code if user does not want to exit or play
+            elif first_choice in h_options: #Looks at previous scores
+                show_chart()
+            elif first_choice in e_options: #exiting
+                game_on = False
+            else: # print error
+                first_choice = error_handle(initial_choices, first_choice)
+        
+        #Checks if user wants to play again or exit
+        replay = input("Are you sure you want to leave the planner? ").lower().strip()
+        error_handle(correct_ans, replay)
+        if replay in ["no", "n"]:
+            game_on = True
+            continue
+        else:
+            game_on = False
+            print("\nHave a wonderful rest of your day!")
+        
+main()
