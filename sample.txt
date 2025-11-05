@@ -1,15 +1,15 @@
 Spaghetti, C, 6.00
-Bread rolls, C, 10:00
-Minced meat, P, 20:00
-Tomatoes, F, 6:00
-Lettuce, F, 9:00
-Olives, F, 10:00
-Wall nuts, P, 5:00
-Pizza slice, C, 10:00
-Ravioli, C, 6:00
-Fries, C, 4:00
-Cheese, C, 8:00
-Crackers, C, 4:00
-Cookies, C, 6:00
-Cake slice, C, 10:00
-Pastry, C, 12:00
+Bread rolls, C, 10.00
+Minced meat, P, 20.00
+Tomatoes, F, 6.00
+Lettuce, F, 9.00
+Olives, F, 10.00
+Wall nuts, P, 5.00
+Pizza slice, C, 10.00
+Ravioli, C, 6.00
+Fries, C, 4.00
+Cheese, C, 8.00
+Crackers, C, 4.00
+Cookies, C, 6.00
+Cake slice, C, 10.00
+Pastry, C, 12.00
