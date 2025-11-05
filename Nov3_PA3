@@ -1,6 +1,6 @@
 
 import time
-'''
+
 #Calls for the function to play a flashcard quiz and uses the file name from the user as a parameter
 def play_quiz(filename):
 
@@ -226,78 +226,7 @@ def main():
         
 main()
 
-'''
-def star_wars_intro_text(text_lines, initial_indent=20, initial_width=40, indent_decrease=1, width_increase=2):
-    """
-    Prints text in a style inspired by the Star Wars opening crawl.
 
-    Args:
-        text_lines (list): A list of strings, where each string is a paragraph.
-        initial_indent (int): The starting indentation for the first line.
-        initial_width (int): The starting line width for the first line.
-        indent_decrease (int): How much to decrease the indent after each pair of lines.
-        width_increase (int): How much to increase the width after each pair of lines.
-    """
-    current_indent = initial_indent
-    current_width = initial_width
-
-    for paragraph in text_lines:
-        words = paragraph.split()
-        current_line = []
-        line_count = 0
-
-        for word in words:
-            if len(" ".join(current_line + [word])) <= current_width:
-                current_line.append(word)
-            else:
-                # Justify the current line
-                line_str = " ".join(current_line)
-                if len(line_str) < current_width:
-                    num_gaps = len(current_line) - 1
-                    if num_gaps > 0:
-                        extra_spaces = current_width - len(line_str)
-                        spaces_per_gap = extra_spaces // num_gaps
-                        remaining_spaces = extra_spaces % num_gaps
-                        justified_line = ""
-                        for i, w in enumerate(current_line):
-                            justified_line += w
-                            if i < num_gaps:
-                                justified_line += " " * (spaces_per_gap + (1 if i < remaining_spaces else 0))
-                        print(" " * current_indent + justified_line)
-                    else: # Single word line or no gaps
-                        print(" " * current_indent + line_str.center(current_width))
-                else:
-                    print(" " * current_indent + line_str)
-
-                line_count += 1
-                if line_count % 2 == 0:  # Adjust parameters after every two lines
-                    current_indent = max(0, current_indent - indent_decrease)
-                    current_width += width_increase
-
-                current_line = [word]
-
-        # Print the last line of the paragraph (not justified)
-        if current_line:
-            print(" " * current_indent + " ".join(current_line))
-            line_count += 1
-            if line_count % 2 == 0:
-                current_indent = max(0, current_indent - indent_decrease)
-                current_width += width_increase
-
-        # Add an empty line between paragraphs, and adjust parameters
-        print()
-        current_indent = max(0, current_indent - indent_decrease)
-        current_width += width_increase
-
-# Example Usage:
-intro_text = [
-    "A long time ago in a galaxy far, far away...",
-    "It is a period of civil war. Rebel spaceships, striking from a hidden base, have won their first victory against the evil Galactic Empire.",
-    "During the battle, Rebel spies managed to steal secret plans to the Empire's ultimate weapon, the DEATH STAR, an armored space station with enough power to destroy an entire planet.",
-    "Pursued by the Empire's sinister agents, Princess Leia races home aboard her starship, custodian of the stolen plans that can save her people and restore freedom to the galaxy...."
-]
-
-star_wars_intro_text(intro_text)
 '''
 ls
 cd O tab

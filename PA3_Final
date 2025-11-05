@@ -1,8 +1,119 @@
+
 import time
+import matplotlib.pyplot as plt
+import tkinter as tk
+'''
+root = tk.Tk()
+
+label = tk.Label(root, text="Hello, Tkinter!")
+button = tk.Button(root, text="Click Me")
+
+label.pack()
+button.pack()
+
+
+def show_input():
+    user_text = entry.get() # Get the text from the Entry widget
+    label.config(text=f"You entered: {user_text}")
+
+root = tk.Tk()
+root.title("Input Example")
+
+entry = tk.Entry(root) # Create an Entry widget
+entry.pack(pady=10)
+
+button = tk.Button(root, text="Show Input", command=show_input)
+button.pack()
+
+label = tk.Label(root, text="")
+label.pack()
+
+root.mainloop()
+'''
+p_type = {
+
+}
+c_type = {
+
+}
+f_type = {
+
+}
+
+fr_type = {
+
+}
+
+def pie_chart(sizes, labels, title):
+    fig, ax = plt.subplots()
+    ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')
+    plt.title(title)
+    plt.show()
 
 def sample_chart():
-    print("This function allows user to view an example")
+    print("Here is the suggested dietary chart you follow")
 
+    sizes = [15, 15, 20, 10]
+    labels = ["Carbs", "Protein", "Fiber", "Fruits"]
+    pie_chart(sizes, labels, "Suggested Diet Chart")
+
+    budget = float(input("\nWhat is your budget for this week? \n>>"))
+
+    with open("sample.txt", "r") as f:
+        lines = f.read().splitlines()
+        number = (len(lines))
+        print(f"Here are the sample food items for this week: \nFood Item, Type, Cost")
+        total_cost = 0
+        for i in lines:
+            print(i)
+            food, type, cost = i.strip().split(",")
+            #total_cost += float(cost)
+
+            if type=="P":
+                p_type[food] = cost
+            elif type == "F":
+                f_type[food] = cost
+            elif type == "FR":
+                fr_type[food] = cost
+            else:
+                c_type[food] = cost
+
+        print("\n")
+        goal = True
+        if len(c_type) < 2/8*number:
+            print("You have not reached your carb goal!")
+            labels[0] = f'\033[91m {labels[0]} \033[0m'
+            goal = False
+        if len(p_type) < 2/8*number:
+            print("You have not reached your protein goal!")
+            labels[1] = f'\033[91m {labels[1]} \033[0m'
+            goal = False
+        if len(f_type) < 3/8*number:
+            print("You have not reached your fiber goal!")
+            labels[2] = f'\033[91m {labels[2]} \033[0m'
+            goal = False
+        if len(fr_type) < 1/8*number:
+            print("You have not reached your fruit goal!")
+            labels[3] = f'\033[91m {labels[3]} \033[0m'
+            goal = False
+        if goal:
+            print("CONGRATS! You have reached all your dietary goals!")
+            for i in range(4):
+                labels[i] = f'\033[0;32m {labels[i]} \033[0;32m'
+
+    def_size = [len(c_type), len(p_type), len(f_type), len(fr_type)]
+    pie_chart(def_size, labels, "Your dietary chart")
+    
+
+    print("Here is your budget tracker for these items:")
+    print("Budget, Total Cost, Left Over")
+    left_over = budget-total_cost
+    if left_over<0:
+        left_over = 0
+    print(f"${budget}, ${total_cost}, ${left_over} remaining")
+    
+    
 def create_new_file(file_name):
     print("This function allows user to create a new file")
     diet_info = ""
@@ -35,9 +146,9 @@ def user_experience(string, n):
 
 def main(): 
     #initialize variables
-    initial_choices = ["view sample","see previous","exit"]
+    initial_choices = ["view/create","see previous","exit"]
     file_types = [".txt", ".csv", "txt", "csv"]
-    p_options = ["view","vs","view sample","1","1.", "sample"]
+    p_options = ["view","v","view/create","1","1.", "create"]
     h_options = ["see previous", "previous", "s", "see", "sp", "s", "2","2."]
     e_options = ["exit","e","exit game", "3", "3."]
     correct_ans = ["yes","no", "y", "n"]
@@ -65,7 +176,6 @@ def main():
             first_choice = input(f"What would you like to do today?\n>>").lower().strip()
 
             user_experience("redirecting...", 3)
-            print("\n")
             
             if first_choice in p_options: #creating the diet chart
                 print("*"*20)
