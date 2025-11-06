@@ -1,7 +1,7 @@
 Spaghetti, C, 6.00
 Bread rolls, C, 10.00
 Minced meat, P, 20.00
-Tomatoes, F, 6.00
+Tomatoes, FR, 6.00
 Lettuce, F, 9.00
 Olives, F, 10.00
 Wall nuts, P, 5.00
@@ -13,3 +13,4 @@ Crackers, C, 4.00
 Cookies, C, 6.00
 Cake slice, C, 10.00
 Pastry, C, 12.00
+Banana, FR, 3.00
