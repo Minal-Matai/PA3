@@ -62,10 +62,60 @@ def circle_text(info):
     print("|"+info+"|")
     print("╰─"+"-"*length+"─╯")
 
+def error_handle(correct_list, user_input):
+    while user_input not in correct_list:
+        print("*"*50)
+        print(" "*22+"!ERROR!"+" "*22)
+        print(" "*12+"That is not a valid option"+" "*12)
+        print(" "*17+"Please try again"+" "*17)
+        print("*"*50)
+        print("-"*20)
+        print("\nAcceptable choices:")
+        for i in correct_list:
+            print(f"- {i}")
+        user_input = input("Please re-enter your answer using the acceptable choices above:\n>>").lower().strip()
+        print("-"*20)
+    return user_input
 
-def sample_chart():
+def user_experience(string, n):
+    for i in range(n):
+        time.sleep(0.15)
+        print(string)
 
-    print("We'll first gather and give info about your food items:")
+def integer_check(input_str, topic):
+    int_loop = True
+    while int_loop:
+        ans = input(input_str)
+        try:
+            ans = int(ans)
+            int_loop = False
+        except ValueError:
+            print("Error! Please enter a number to represent the {topic}: ")
+            int_loop = True
+    return ans
+
+def replay(loop_control):
+    p_type.clear()
+    c_type.clear()
+    f_type.clear()
+    fr_type.clear()
+
+    user_experience("",1)
+    print("~"*50)
+    replay = input("\n😞 Would you like to leave (yes/no) 😞?\n>>").lower().strip()
+    ans = ["yes","y","no","n"]
+    error_handle(replay,ans)
+    if replay in ["no","n"]:
+        loop_control = False
+    else:
+        loop_control = True
+        print("\n☀️ Have a wonderful rest of your day! ☀️\n")
+    print("~"*50)
+    return loop_control
+
+def sample_chart(filename):
+
+    print("\nWe'll first gather and give info about your food items:")
     cost_loop = True
     while cost_loop:
         budget = input("What is your budget for this week? \n>>")
@@ -93,7 +143,7 @@ def sample_chart():
 
     table_info = []
 
-    with open("sample.txt", "r") as f:
+    with open(filename, "r") as f:
         lines = f.read().splitlines()
         number = (len(lines))
         
@@ -115,7 +165,7 @@ def sample_chart():
                 fr_type[food] = cost
             else:
                 c_type[food] = cost
-           
+        
         goal = True
         p_score = 0
         c_score = 0
@@ -179,10 +229,10 @@ def sample_chart():
     input("\nPress enter when you want to move on >> ")
 
     user_experience("",1)
-    user_experience("loading budget...",1)
+    user_experience("now loading budget...",1)
     user_experience("",1)
 
-    print("\nHere is your budget tracker for these items:")
+    print("Here is your budget tracker for these items:")
     left_over = budget-total_cost
     if left_over<0:
         left_over = 0
@@ -190,6 +240,8 @@ def sample_chart():
     time.sleep(0.5)
     create_table(["Budget", "Total Cost", "Left Over"],[[f"${budget:.2f}", f"${total_cost:.2f}", f"${left_over:.2f}"]])
     
+    print("\nReference Sheet:")
+    print("->Budget-The amount you entered at the beginning\n->Total Cost-The sum of the costs of all items\n-How much money you have left over (0 means you have none or you owe money)")
     input("\nPress enter when you want to move on >> ")
     user_experience("",1)
 
@@ -208,13 +260,48 @@ def sample_chart():
         if c_score<0:
             time.sleep(0.5)
             circle_text("Carbs")
-       
-    return budget, total_cost, left_over
+
     
 def create_new_file(file_name):
-    print("This function allows user to create a new file")
-    diet_info = ""
-    return diet_info
+    with open(file_name,"a") as f:
+        add_loop = True
+        while add_loop:
+            time.sleep(0.5)
+            print("="*20)
+            print("Adding your items:".center(20))
+            print("="*20)
+            user_experience("",1)
+            food = input("Enter your food item: ").capitalize().strip()
+            ftype = input("Enter what type of food it is\n(C(carb), P(protein), F(fiber), or FR(fruit): ").upper().strip()
+            ftype = error_handle(["C", "P","FR","F"],ftype)
+            cost = integer_check("Enter the price of your food: ", "price")
+            user_experience("",1)
+            print("~"*20)
+            f.write(f"{food}, {ftype}, {cost:.2f}\n")
+            add_loop = replay(add_loop)
+        f.close()
+
+    sample_chart(file_name)
+    file_name.close()
+
+    user_experience("",1)
+    user_experience("loading...",1)
+    user_experience("",1)
+
+    print("~"*50)
+    edit = input("\nWould you like to edit anything in your list of items (yes/no)?\n>>").lower().strip()
+    print("\n","~"*50)
+    error_handle(["yes","y","n""no"], edit)
+    while edit in ["y","yes"]:
+        print("="*50)
+        user_experience("",1)
+        dict_name = input("Would you like to edit the items in proteins, carbs, fruits, or fiber? ").lower().strip()
+        error_handle(["carbs","c","protein","p","fiber","f","fruit","fr"])
+        file_opts = ["add", "change", "remove"]
+        print("\nHow would you like to change your items?")
+        for index, r in enumerate(file_opts):
+                print(f"  {index + 1}. {r.capitalize()}")
+
 
 def add_chart(diet_info, date):
     print("This function adds all previous charts to a file")
@@ -222,37 +309,6 @@ def add_chart(diet_info, date):
 def show_chart():
     print("Displays all previous charts")
 
-def error_handle(correct_list, user_input):
-    while user_input not in correct_list:
-        print("*"*50)
-        print(" "*22+"!ERROR!"+" "*22)
-        print(" "*12+"That is not a valid option"+" "*12)
-        print(" "*17+"Please try again"+" "*17)
-        print("*"*50)
-        print("-"*20)
-        print("\nAcceptable choices:")
-        for i in correct_list:
-            print(f"- {i}")
-        user_input = input("Please re-enter your answer using the acceptable choices above:\n>>").lower().strip()
-        print("-"*20)
-    return user_input
-
-def user_experience(string, n):
-    for i in range(n):
-        time.sleep(0.15)
-        print(string)
-
-def integer_check(input_str, topic):
-    int_loop = True
-    while int_loop:
-        ans = input(input_str)
-        try:
-            ans = int(ans)
-            int_loop = False
-        except ValueError:
-            print("Error! Please enter a number to represent the {topic}: ")
-            int_loop = False
-    return ans
 
 def main(): 
     #initialize variables
@@ -308,7 +364,7 @@ def main():
                 user_experience("",1)
                 print("="*50)
                 user_experience("",1)
-                print("Get your ingredients and budget ready! You can... \n   |  a. View sample   |   b. Create own  |")
+                print("Get your ingredients and budget ready! You can... \n   |    a. View sample     |     b. Create own    |")
                 user_experience("",1)
                 print("="*50)
                 add_terms = input("👉 What would you like to do?\n>>").lower()
@@ -321,9 +377,12 @@ def main():
                 if add_terms in ["create", "c", "b.", "b", "create own"]:
 
                     user_experience("",1)
-                    user_experience("loading...", 2)
+                    user_experience("loading...", 1)
+                    print("~"*50)
                     quiz_fn = input(f"\nWhat would you like to name your file?\n>>").lower().strip()
                     quiz_ext = input("Would you like a .txt or .csv file?\n>>").lower().strip()
+                    print("~"*50)
+                    user_experience("",1)
                     #Checks if file name is valid, and stores the file name if it exists
                     quiz_ext = error_handle(file_types, quiz_ext)
 
@@ -333,12 +392,15 @@ def main():
                     else:
                         file_url = quiz_fn+".txt" #txt
                         
-                    diet_chart = create_new_file(file_url)
-                    add_chart(diet_chart, date)
+                    create_new_file(file_url)
+                    add_chart(date)
 
                 else:
-
-                    sample_chart()
+                    loop_control = True
+                    while loop_control:
+                        sample_chart("sample.txt")
+                        loop_control = replay(loop_control)
+                    "sample.txt".close()
 
             #Runs the other code if user does not want to exit or play
             elif first_choice in h_options: #Looks at previous scores
@@ -349,24 +411,13 @@ def main():
                 first_choice = error_handle(initial_choices, first_choice)
         
         #Checks if user wants to play again or exit
-        replay = input("😞 Are you sure you want to leave the planner 😞 (yes/no)?\n>>").lower().strip()
-        error_handle(correct_ans, replay)
-        if replay in ["no", "n"]:
-            game_on = True
-            continue
-        else:
-            game_on = False
-            print("\n☀️ Have a wonderful rest of your day! ☀️")
+        game_on = replay(game_on)
         
 main()
 
 #Try and except for date
 #Create see previous
 #Create ability to add own file
-#Transition between suggested chart and budget
-#Make food items look better
-#Say something after the budget chart shows up
-#Make other elements look nicer (like error message)
 
 #Add time
 #add \n's

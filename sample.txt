@@ -4,7 +4,7 @@ Minced meat, P, 20.00
 Tomatoes, FR, 6.00
 Lettuce, F, 9.00
 Olives, F, 10.00
-Wall nuts, P, 5.00
+Wallnuts, P, 5.00
 Pizza slice, C, 10.00
 Ravioli, C, 6.00
 Fries, C, 4.00
