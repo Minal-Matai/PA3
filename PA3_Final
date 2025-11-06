@@ -76,13 +76,20 @@ def sample_chart():
             print("Error! Please enter a number including cents (e.g. 6.00 or 19.99):")
             cost_loop = True
 
+    user_experience("",1)
+    user_experience("next page...",1)
+    user_experience("",1)
+
     print("="*50)
-    print("\nHere is the suggested dietary chart you follow:".center(50))
+    print("Above is the suggested dietary chart you should follow:".center(50))
     print("="*50)
 
     sizes = [15, 15, 20, 10]
     labels = ["Carbs", "Protein", "Fiber", "Fruits"]
+    time.sleep(0.5)
     pie_chart(sizes, labels, "Suggested Diet Chart")
+
+    input("\nPress enter when you want to move on >> ")
 
     table_info = []
 
@@ -97,8 +104,8 @@ def sample_chart():
             ftype = line_list[1]
             cost = float(line_list[2])
             total_cost += cost
-            cost = f"{cost:.2f}"
-            table_info.append(line_list)
+            round_cost = f"{cost:.2f}"
+            table_info.append([food,ftype,round_cost])
 
             if ftype == "P":
                 p_type[food] = cost
@@ -115,59 +122,91 @@ def sample_chart():
         fr_score = 0
         f_score = 0
 
+        user_experience("",1)
+        user_experience("loading food list...",1)
+        user_experience("",1)
+
         print("Type: Carbs, Proteins, Fibers, FRuits\n")
         create_table(["Food", "Type", "Cost($)"], table_info)
 
-        print("\nBased on these items...")
+        input("\nPress enter when you want to move on >> ")
+
+        user_experience("",1)
+        user_experience("analyzing...",1)
+        user_experience("",1)
+
+        print("Based on these items...")
 
         if len(c_type) < 2/8*number:
+            time.sleep(0.5)
             cgoal="You have not reached your carb goal!"
             circle_text(cgoal)
             c_score-=1
             goal = False
         if len(p_type) < 2/8*number:
+            time.sleep(0.5)
             pgoal="You have not reached your protein goal!"
             circle_text(pgoal)
             p_score-=1
             goal = False
         if len(f_type) < 3/8*number:
+            time.sleep(0.5)
             fgoal="You have not reached your fiber goal!"
             circle_text(fgoal)
             f_score-=1
             goal = False
         if len(fr_type) < 1/8*number:
+            time.sleep(0.5)
             frgoal="You have not reached your fruit goal!"
             circle_text(frgoal)
             fr_score-=1
             goal = False
         if goal:
+            time.sleep(1)
             c_score+=1
             p_score+=1
             f_score+=1
             fr_score+=1
             print("CONGRATS! You have reached all your dietary goals!")
 
+    user_experience("",1)
+    user_experience("loading chart...",1)
+    user_experience("",1)
+
     def_size = [len(c_type), len(p_type), len(f_type), len(fr_type)]
     pie_chart(def_size, labels, "Your dietary chart")
     
+    input("\nPress enter when you want to move on >> ")
+
+    user_experience("",1)
+    user_experience("loading budget...",1)
+    user_experience("",1)
 
     print("\nHere is your budget tracker for these items:")
     left_over = budget-total_cost
     if left_over<0:
         left_over = 0
 
+    time.sleep(0.5)
     create_table(["Budget", "Total Cost", "Left Over"],[[f"${budget:.2f}", f"${total_cost:.2f}", f"${left_over:.2f}"]])
     
+    input("\nPress enter when you want to move on >> ")
+    user_experience("",1)
+
     if left_over>0:
-        print(f"\nWith ${left_over} left, you can supplement more items into one of the categories!\n")
+        print(f"With ${left_over} left, you can supplement more items into one of the categories!\n")
         print("Types of food that need increasing in order:")
         if f_score<0:
+            time.sleep(0.5)
             circle_text("!Fiber!") 
         if fr_score<0:
+            time.sleep(0.5)
             circle_text("Fruit") 
         if p_score<0:
+            time.sleep(0.5)
             circle_text("Protein")     
         if c_score<0:
+            time.sleep(0.5)
             circle_text("Carbs")
        
     return budget, total_cost, left_over
