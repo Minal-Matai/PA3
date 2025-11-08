@@ -2,35 +2,7 @@
 import time
 import matplotlib.pyplot as plt
 from tabulate import tabulate
-import tkinter as tk
-'''
-root = tk.Tk()
 
-label = tk.Label(root, text="Hello, Tkinter!")
-button = tk.Button(root, text="Click Me")
-
-label.pack()
-button.pack()
-
-
-def show_input():
-    user_text = entry.get() # Get the text from the Entry widget
-    label.config(text=f"You entered: {user_text}")
-
-root = tk.Tk()
-root.title("Input Example")
-
-entry = tk.Entry(root) # Create an Entry widget
-entry.pack(pady=10)
-
-button = tk.Button(root, text="Show Input", command=show_input)
-button.pack()
-
-label = tk.Label(root, text="")
-label.pack()
-
-root.mainloop()
-'''
 p_type = {
 
 }
@@ -62,17 +34,21 @@ def circle_text(info):
     print("|"+info+"|")
     print("╰─"+"-"*length+"─╯")
 
+#datatypes of parameters: correct_list-list, user_input-string
+#Dataypes of return: user_input - string
 def error_handle(correct_list, user_input):
     while user_input not in correct_list:
         print("*"*50)
-        print(" "*22+"!ERROR!"+" "*22)
+        print(" "*22+"❌!ERROR!❌"+" "*22)
         print(" "*12+"That is not a valid option"+" "*12)
         print(" "*17+"Please try again"+" "*17)
         print("*"*50)
         print("-"*20)
-        print("\nAcceptable choices:")
+        time.sleep(2)
+        print("\n✅ Acceptable choices:")
         for i in correct_list:
             print(f"- {i}")
+        time.sleep(1)
         user_input = input("Please re-enter your answer using the acceptable choices above:\n>>").lower().strip()
         print("-"*20)
     return user_input
@@ -90,10 +66,23 @@ def integer_check(input_str, topic):
             ans = int(ans)
             int_loop = False
         except ValueError:
-            print("Error! Please enter a number to represent the {topic}: ")
+            print(f"{"*"*20} ❌!ERROR!❌.center(20){"*"*20} \n Please enter a number to represent the {topic}: ")
             int_loop = True
     return ans
 
+def float_check(input_str, topic):
+    cost_loop = True
+    while cost_loop:
+        budget = input(input_str)
+        try:
+            budget = float(budget)
+            cost_loop = False
+        except ValueError:
+            print(f"{"*"*20} ❌!ERROR!❌.center(20){"*"*20}\nPlease enter a number to represent {topic} (e.g. 6.00 or 19.99):")
+            cost_loop = True
+    return budget
+
+#👉 What is your budget for this week? \n>>$
 def replay(loop_control):
     p_type.clear()
     c_type.clear()
@@ -104,42 +93,39 @@ def replay(loop_control):
     print("~"*50)
     replay = input("\n😞 Would you like to leave (yes/no) 😞?\n>>").lower().strip()
     ans = ["yes","y","no","n"]
-    error_handle(replay,ans)
+    error_handle(ans,replay)
     if replay in ["no","n"]:
-        loop_control = False
-    else:
         loop_control = True
+    else:
+        loop_control = False
         print("\n☀️ Have a wonderful rest of your day! ☀️\n")
     print("~"*50)
     return loop_control
 
-def sample_chart(filename):
-
-    print("\nWe'll first gather and give info about your food items:")
-    cost_loop = True
-    while cost_loop:
-        budget = input("What is your budget for this week? \n>>")
-        try:
-            budget = float(budget)
-            cost_loop = False
-        except ValueError:
-            print("Error! Please enter a number including cents (e.g. 6.00 or 19.99):")
-            cost_loop = True
+def sample_chart(filename, c_score, p_score, f_score, fr_score, budget):
 
     user_experience("",1)
-    user_experience("next page...",1)
+    print("~"*150)
+    print("\nDISCLAIMER: This program is for you own good! You have the freedom to decide a lot of aspects (such as if a certain ingredient is a carb or fiber)\n We suggest you follow the dietry labels on the back of the food or even google, as self-evaluation could result in data bias.\n")
+    print("~"*150)
+    input("👉 Press enter when you are ready to move on >>")
+
+    user_experience("",1)
+    user_experience("next page...🔄",1)
     user_experience("",1)
 
-    print("="*50)
-    print("Above is the suggested dietary chart you should follow:".center(50))
-    print("="*50)
+    print("="*80)
+    print("\nNow we will share some info regarding nutrition value -> ")
+    print("-"*40)
+    print("Above is the suggested dietary chart you should follow:\n".center(80))
+    print("="*80)
 
     sizes = [15, 15, 20, 10]
     labels = ["Carbs", "Protein", "Fiber", "Fruits"]
     time.sleep(0.5)
     pie_chart(sizes, labels, "Suggested Diet Chart")
 
-    input("\nPress enter when you want to move on >> ")
+    input("\n👉 Press enter when you want to move on >> ")
 
     table_info = []
 
@@ -167,69 +153,102 @@ def sample_chart(filename):
                 c_type[food] = cost
         
         goal = True
-        p_score = 0
-        c_score = 0
-        fr_score = 0
-        f_score = 0
 
         user_experience("",1)
-        user_experience("loading food list...",1)
+        user_experience("loading food list...🔄",1)
         user_experience("",1)
 
-        print("Type: Carbs, Proteins, Fibers, FRuits\n")
+        print("Below is the table with sample food items, their types (refer to below) and food prices.")
+        print("\nType: Carbs, Proteins, Fibers, FRuits\n")
+        time.sleep(1)
         create_table(["Food", "Type", "Cost($)"], table_info)
-
-        input("\nPress enter when you want to move on >> ")
+        input("\n👉 Press enter when you want to move on >> ")
 
         user_experience("",1)
-        user_experience("analyzing...",1)
+        user_experience("analyzing...🔄",1)
         user_experience("",1)
 
         print("Based on these items...")
 
+        print("\nYou will now receive a score summary.\n. -Higher negative points -> consistently not reaching your score ❌ \n. -Higher positive points -> consistently reaching your score ✅")
+
+        #Calculates carb score
         if len(c_type) < 2/8*number:
             time.sleep(0.5)
-            cgoal="You have not reached your carb goal!"
-            circle_text(cgoal)
             c_score-=1
+            cgoal=f"You have not reached your carb goal! \nYour score was {c_score} ❌"
+            circle_text(cgoal)
             goal = False
+        elif len(c_type) >= 2/8*number:
+            time.sleep(0.5)
+            c_score+=1
+            cgoal=f"CONGRATS! You have reached your carb goal! \nYour score was +{c_score} ✅"
+            circle_text(cgoal)
+            goal = False
+
+        #Calculates protein score
         if len(p_type) < 2/8*number:
             time.sleep(0.5)
-            pgoal="You have not reached your protein goal!"
-            circle_text(pgoal)
             p_score-=1
+            pgoal=f"You have not reached your protein goal! \nYour protein score was {p_score} ❌"
+            circle_text(pgoal)
             goal = False
+        elif len(p_type) >= 2/8*number:
+            time.sleep(0.5)
+            p_score+=1
+            pgoal=f"CONGRATS! You have reached your protein goal! \nYour protein score was +{p_score} ✅"
+            circle_text(pgoal)
+            goal = False
+
+        #Calculates fiber score
         if len(f_type) < 3/8*number:
             time.sleep(0.5)
-            fgoal="You have not reached your fiber goal!"
-            circle_text(fgoal)
             f_score-=1
+            fgoal=f"You have not reached your fiber goal! \nYour fiber score was {f_score} ❌❌"
+            circle_text(fgoal)
             goal = False
+        elif len(f_type) >= 3/8*number:
+            time.sleep(0.5)
+            f_score+=1
+            fgoal=f"CONGRATS! You have reached your fiber goal! \nYour fiber score was +{f_score} ✅✅"
+            circle_text(fgoal)
+
+        #Calculates fruit score
         if len(fr_type) < 1/8*number:
             time.sleep(0.5)
-            frgoal="You have not reached your fruit goal!"
-            circle_text(frgoal)
             fr_score-=1
+            frgoal=f"You have not reached your fruit goal! \nYour fruit score was {fr_score} ❌❌"
+            circle_text(frgoal)
             goal = False
+        elif len(fr_type) >= 1/8*number: 
+            time.sleep(0.5)
+            fr_score+=1
+            frgoal=f"CONGRATS! You have reached your fruit goal! \nYour fruit score was +{fr_score} ✅✅"
+            circle_text(frgoal)
+
+        #Calculates overall score
         if goal:
             time.sleep(1)
             c_score+=1
             p_score+=1
             f_score+=1
             fr_score+=1
-            print("CONGRATS! You have reached all your dietary goals!")
+            print("🎉 CONGRATS! You have reached all your dietary goals! 🎉")
+
+    f.close()
+
+    input("\n👉 Press enter when you want to move on >> ")
 
     user_experience("",1)
-    user_experience("loading chart...",1)
+    user_experience("loading chart...🔄",1)
     user_experience("",1)
 
     def_size = [len(c_type), len(p_type), len(f_type), len(fr_type)]
     pie_chart(def_size, labels, "Your dietary chart")
-    
-    input("\nPress enter when you want to move on >> ")
+    input("\n👉 Press enter when you want to move on >> ")
 
     user_experience("",1)
-    user_experience("now loading budget...",1)
+    user_experience("now loading budget...🔄",1)
     user_experience("",1)
 
     print("Here is your budget tracker for these items:")
@@ -237,77 +256,166 @@ def sample_chart(filename):
     if left_over<0:
         left_over = 0
 
-    time.sleep(0.5)
     create_table(["Budget", "Total Cost", "Left Over"],[[f"${budget:.2f}", f"${total_cost:.2f}", f"${left_over:.2f}"]])
     
+    time.sleep(2)
+    print("~"*75)
     print("\nReference Sheet:")
-    print("->Budget-The amount you entered at the beginning\n->Total Cost-The sum of the costs of all items\n-How much money you have left over (0 means you have none or you owe money)")
-    input("\nPress enter when you want to move on >> ")
+    print("->Budget-The amount you entered at the beginning\n->Total Cost-The sum of the costs of all items\n-How much money you have left over (0 means you have none or you owe money AND ENDS THIS PART)")
+    print("~"*75)
+    input("\n👉 Press enter when you want to move on >> ")
     user_experience("",1)
-
-    if left_over>0:
+    if left_over==0:
+        print("\nYour budget is less than you total cost 😢 \nUh oh! It looks like you need to either increase your budget or lower the number of items you have!")
+        return
+    
+    else:
         print(f"With ${left_over} left, you can supplement more items into one of the categories!\n")
-        print("Types of food that need increasing in order:")
+        print("❌Types of food that are needed (in order of most urgent)❌:")
         if f_score<0:
             time.sleep(0.5)
-            circle_text("!Fiber!") 
+            circle_text("!Fiber! -> Most important") 
         if fr_score<0:
             time.sleep(0.5)
-            circle_text("Fruit") 
+            circle_text("!Fruit! -> Very important") 
         if p_score<0:
             time.sleep(0.5)
-            circle_text("Protein")     
+            circle_text("Protein -> Moderately important")     
         if c_score<0:
+            time.sleep(0.5)
+            circle_text("Carbs -> Not required")
+        
+        print("\n🎉✅Types of food you reached your goal for!✅🎉")
+        if f_score>0:
+            time.sleep(0.5)
+            circle_text("!Fiber!") 
+        if fr_score>0:
+            time.sleep(0.5)
+            circle_text("Fruit") 
+        if p_score>0:
+            time.sleep(0.5)
+            circle_text("Protein")     
+        if c_score>0:
             time.sleep(0.5)
             circle_text("Carbs")
 
+    return c_score, p_score, f_score, fr_score, budget, total_cost
     
-def create_new_file(file_name):
+def create_new_file(file_name, c_score, p_score, f_score, fr_score):
+    
     with open(file_name,"a") as f:
         add_loop = True
         while add_loop:
             time.sleep(0.5)
-            print("="*20)
+            print("="*30)
             print("Adding your items:".center(20))
-            print("="*20)
+            print("="*30)
             user_experience("",1)
-            food = input("Enter your food item: ").capitalize().strip()
-            ftype = input("Enter what type of food it is\n(C(carb), P(protein), F(fiber), or FR(fruit): ").upper().strip()
+            food = input("👉 Enter your food item: ").capitalize().strip()
+            ftype = input("👉 Enter what type of food it is\n  [Carb (C), Protein (P)), Fiber (F), or FRuit (FR)]: ").upper().strip()
             ftype = error_handle(["C", "P","FR","F"],ftype)
-            cost = integer_check("Enter the price of your food: ", "price")
+            cost = float_check("👉 Enter the price of your food: ", "price")
             user_experience("",1)
-            print("~"*20)
+            print("~"*30)
             f.write(f"{food}, {ftype}, {cost:.2f}\n")
             add_loop = replay(add_loop)
-        f.close()
+    f.close()
 
-    sample_chart(file_name)
+    c_score, p_score, f_score, fr_score, budget, total_cost = sample_chart(file_name, c_score, p_score, f_score, fr_score, budget)
     file_name.close()
 
     user_experience("",1)
-    user_experience("loading...",1)
+    user_experience("loading...🔄",1)
     user_experience("",1)
 
     print("~"*50)
-    edit = input("\nWould you like to edit anything in your list of items (yes/no)?\n>>").lower().strip()
+    edit = input("\n👉 Would you like to edit anything in your list of items (yes/no)?\n>>").lower().strip()
     print("\n","~"*50)
-    error_handle(["yes","y","n""no"], edit)
+    edit = error_handle(["yes","y","n""no"], edit)
+    
     while edit in ["y","yes"]:
         print("="*50)
         user_experience("",1)
-        dict_name = input("Would you like to edit the items in proteins, carbs, fruits, or fiber? ").lower().strip()
-        error_handle(["carbs","c","protein","p","fiber","f","fruit","fr"])
+        dict_name = input("👉 Would you like to edit the items in proteins, carbs, fruits, or fiber? ").lower().strip()
+        error_handle(["carbs","c","protein","p","fiber","f","fruit","fr"], dict_name)
         file_opts = ["add", "change", "remove"]
-        print("\nHow would you like to change your items?")
+        print("\nHow would you like to change your items? Options:")
         for index, r in enumerate(file_opts):
                 print(f"  {index + 1}. {r.capitalize()}")
+        file_choice = input("👉 >>").lower().strip()
+        user_experience("",1)
+        print("="*50)
+        error_handle(["add","1","1.","change","2","2.","remove","3.","3"], file_choice)
+        if file_choice in ["remove","3","3."]:
+            food_item = input("👉 What item would you like to remove (refer to the table above)?\n>>")
+            if dict_name in ["carts","c"]:
+                c_type.pop(food_item)
+            elif dict_name in ["protein","p"]:
+                p_type.pop(food_item)
+            elif dict_name in ["fiber","f"]:
+                f_type.pop(food_item)
+            else:
+                fr_type.pop(food_item)
+            print(f"\n~You have dropped your class for {food_item}~\n")
 
+        else:
+            food_item = input("👉 What item would you like to add or change (refer to the table above)?\n>>").capitalize()
+            cost = integer_check("👉 What is the cost of this item?\n>>$","cost")
+            if dict_name in ["carts","c"]:
+                c_type[food_item] = cost
+            elif dict_name in ["protein","p"]:
+                p_type[food_item] = cost
+            elif dict_name in ["fiber","f"]:
+                f_type[food_item] = cost
+            else:
+                fr_type[food_item] = cost
+            print(f"\n~You have now added {food_item}*****${cost}~")
 
-def add_chart(diet_info, date):
-    print("This function adds all previous charts to a file")
+        with open(file_name,"w") as f:
+            for food in c_type:
+                f.write(f"{food}, C, {c_type[food]:.2f}\n")
+            for food in p_type:
+                f.write(f"{food}, P, {p_type[food]:.2f}\n")
+            for food in f_type:
+                f.write(f"{food}, F, {f_type[food]:.2f}\n")
+            for food in fr_type:
+                f.write(f"{food}, FR, {fr_type[food]:.2f}\n")
+        f.close()
+
+        edit = input("👉 Would you like to continue editing (yes/no)? ")
+        edit = error_handle(["yes","y","n""no"], edit)
+    
+    user_experience("saving info...🔄",1)
+    return c_score, p_score, f_score, fr_score, budget, total_cost
+
+def add_chart(date, c_score, p_score, f_score, fr_score, budget, total_cost):
+    with open("diet_store","a") as f:
+
+        f.write("="*50)
+        f.write(f"\nThe date of this entry is {date}")
+
+        if c_score<1:
+            f.write(circle_text("- You did not reach your carb goal! -")) 
+        if p_score<1:
+            f.write(circle_text("❌ You did not reach your protein goal! ❌"))
+        if f_score<1:
+            f.write(circle_text("❌ You did not reach your fiber goal! ❌"))
+        if fr_score<1:
+            f.write(("❌ You did not reach your fruit goal! ❌"))
+
+        f.write(f"\nHere are your scores for each food type: for {date}")
+        f.write(create_table(["Carb", "Protein", "Fiber", "Fruit"], [[c_score, p_score, f_score, fr_score]]))
+        f.write("\nHere is your budget tracker for this week:")
+        f.write(f"| Your {date} budget: ${budget} | Your total cost of all food items on {date}: ${total_cost}\n")
+        f.write("="*50)
+
+    f.close()
 
 def show_chart():
-    print("Displays all previous charts")
+    with open("diet_store","r") as f:
+        print("Here are all previous entries with dates:")
+        print(f.read())
+    f.close()
 
 
 def main(): 
@@ -323,8 +431,8 @@ def main():
 
     game_on = True
     while game_on:
-        print("")
-        welcome = "!Welcome to your diet and budget tracker!"
+        user_experience("",1)
+        welcome = "!Welcome back/to your diet and budget tracker!"
         circle_text(welcome)
 
         user_experience("",1)
@@ -342,7 +450,7 @@ def main():
         while first_choice not in e_options: 
 
             user_experience("",1)
-            user_experience("loading homepage...", 1)
+            user_experience("loading homepage...🔄", 1)
             user_experience("",1)
 
             print("="*50)
@@ -358,29 +466,35 @@ def main():
             first_choice = input(f"👉 What would you like to do today?\n>>").lower().strip()
             print("-"*50)
             user_experience("",1)
-            user_experience("redirecting...", 1)
+            user_experience("redirecting...🔄", 1)
             
             if first_choice in p_options: #creating the diet chart
                 user_experience("",1)
                 print("="*50)
                 user_experience("",1)
-                print("Get your ingredients and budget ready! You can... \n   |    a. View sample     |     b. Create own    |")
+                print("Get your ingredients and budget ready! You can... \n|    a. View sample     |     b. Create own    |")
                 user_experience("",1)
                 print("="*50)
                 add_terms = input("👉 What would you like to do?\n>>").lower()
                 add_terms = error_handle(c_options, add_terms)
                 print("*"*50)
                 user_experience("",1)
-                user_experience("loading...",1)
+                user_experience("loading...🔄",1)
                 user_experience("",1)
+
+                p_score = 0
+                c_score = 0
+                fr_score = 0
+                f_score = 0
+
+                print("🧊Icebreaker🧊: We'll first gather and give info about your finances -> ")
+                budget = float_check("👉 What is your budget for this week? \n>>$","the cost")
 
                 if add_terms in ["create", "c", "b.", "b", "create own"]:
 
-                    user_experience("",1)
-                    user_experience("loading...", 1)
                     print("~"*50)
-                    quiz_fn = input(f"\nWhat would you like to name your file?\n>>").lower().strip()
-                    quiz_ext = input("Would you like a .txt or .csv file?\n>>").lower().strip()
+                    quiz_fn = input(f"\n👉 What would you like to name your file?\n>>").lower().strip()
+                    quiz_ext = input("👉 Would you like a .txt or .csv file?\n>>").lower().strip()
                     print("~"*50)
                     user_experience("",1)
                     #Checks if file name is valid, and stores the file name if it exists
@@ -391,19 +505,23 @@ def main():
                         file_url = quiz_fn+".csv" #csv
                     else:
                         file_url = quiz_fn+".txt" #txt
-                        
-                    create_new_file(file_url)
-                    add_chart(date)
 
-                else:
                     loop_control = True
                     while loop_control:
-                        sample_chart("sample.txt")
+                        c_score, p_score, f_score, fr_score, budget, total_cost = create_new_file(file_url, c_score, p_score, f_score, fr_score)
+                        add_chart(date, c_score, p_score, f_score, fr_score, budget, total_cost)
                         loop_control = replay(loop_control)
-                    "sample.txt".close()
+
+                else:
+                    loop_control2 = True
+                    while loop_control2:
+                        sample_chart("sample.txt",c_score, p_score, f_score, fr_score, budget)
+                        loop_control2 = replay(loop_control2)
 
             #Runs the other code if user does not want to exit or play
             elif first_choice in h_options: #Looks at previous scores
+                user_experience("previewing history...🔄",1)
+                user_experience("",1)
                 show_chart()
             elif first_choice in e_options: #exiting
                 game_on = False

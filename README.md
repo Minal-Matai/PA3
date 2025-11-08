@@ -1,13 +1,14 @@
 # PA3
 Design Thinking Final Passion Project
 
-Emphasize: A senior resident who has health issues (diabetes and high cholestrol)  needs to keep track of the types of food they buy and keep track of managing finances. A lot of seniors spend the bulk of their money on snacks and sweets which are not beneficial to their health and well-being.
+Emphasize: A senior resident who has health issues (diabetes and high cholestrol) needs to keep track of the types of food they buy and keep track of managing finances. A lot of seniors spend the bulk of their money on snacks and sweets which are not beneficial to their health and well-being.
 
 Research: 
-- The senior residents at Chesterbrook would always talk about what foods and snacks they were buying from Trader Joes and how they always wanted to eat sugary treats. But, as a result, they would continuously have to go to doctor appointments and keep a blood sugar tracker to ensure good health.
-- My grandma, who also lives in a senior home, has recently been buying a lot of sugary treats (scons, honey, etc.), but her blood sugar has sky-rocketed and now she has a very strict diet and regular check ups
--The biggest cuisines seniors love are Italian, Chinese, or Mexican. The mst popular meals are pizza, soup, and bananas.
--Senior residents should be eating meals with a plate made of half of vegetables and fruit, a quarter of carbs, and a quarter of protein.
+- During my experience at Chesterbrook, the senior residents would always talk about what foods and snacks they were buying from Trader Joes and other stores and how they constantly bought sugary treats and other snacks. But, as a result, they would continuously have to go to doctor appointments and keep a blood sugar tracker to ensure good health. This can be very unhealthy for senior lifestyle all because their grocery lists are not structured in a nutritional manner.
+- My grandma, who also lives in a senior home, has recently been buying a lot of sugary foods (scones, cookies, etc.), but her blood sugar has sky-rocketed and now she is required to follow a very strict diet and have regular check ups.
+-The biggest cuisines seniors love are Italian, Chinese, or Mexican. The most popular meals are pizza, soup, and bananas.
+-Senior residents should be eating meals made of a plate with half of vegetables and fruit, a quarter of carbs, and a quarter of protein.
+
 Sources:
 -https://www.goodfoodstl.com/2016/08/seniors-eat/#:~:text=The%20elderly%20are%20frugal%20in,offers%20may%20differ%20by%20locality.
 -https://nutritionsource.hsph.harvard.edu/healthy-eating-plate/#:~:text=Use%20healthy%20oils%20(like%20olive,cuts%2C%20and%20other%20processed%20meats.
