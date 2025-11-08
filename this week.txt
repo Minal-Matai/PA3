@@ -1,0 +1,7 @@
+Brownie, C, 9.00
+Cake, C, 9.00
+Egg, P, 10.00
+Spinach, F, 20.00
+Apple, FR, 9.00
+Orange, FR, 2.99
+Lemon, FR, 5.00
